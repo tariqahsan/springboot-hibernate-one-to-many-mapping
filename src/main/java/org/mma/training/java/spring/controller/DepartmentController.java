@@ -3,17 +3,23 @@ package org.mma.training.java.spring.controller;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
+
+import javax.validation.Valid;
 
 import org.mma.training.java.spring.exception.ResourceNotFoundException;
 import org.mma.training.java.spring.model.Department;
 import org.mma.training.java.spring.repository.DepartmentRepository;
 import org.mma.training.java.spring.service.DepartmentService;
+import org.mma.training.java.spring.util.ErrorMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +35,9 @@ public class DepartmentController {
 
 	@Autowired
 	DepartmentRepository departmentRepository;
+	
+	@Autowired
+	MessageSource messageSource;
 
 	@Autowired
 	DepartmentService departmentService;
@@ -59,9 +68,29 @@ public class DepartmentController {
 	}
 
 	@PostMapping(value = "/department/add")
-	public ResponseEntity<Department> postDepartment(@RequestBody Department department) {
+	public ResponseEntity postDepartment(@RequestBody @Valid final Department department, BindingResult bindingResult) {
 
 		try {
+
+			List<String> errorList = new ArrayList<>();
+			List<ErrorMessage> errorMessages = new ArrayList<>();
+			if (bindingResult.hasErrors()) {
+				bindingResult.getFieldErrors().forEach(fieldError ->
+				errorList.add(fieldError.getField() + ": " + messageSource.getMessage(fieldError, Locale.US))
+						);
+				bindingResult
+				.getFieldErrors()
+				.stream()
+				.forEach(fieldError -> {            
+					ErrorMessage errorMessage = new ErrorMessage(messageSource.getMessage(fieldError, Locale.US), fieldError.getField());           	
+					System.out.println(errorMessage.getMessage());
+					System.out.println(errorMessage.getFieldName());
+					errorMessages.add(errorMessage);
+				});
+				return new ResponseEntity<>(errorMessages, HttpStatus.NOT_ACCEPTABLE);
+		
+			}
+
 			Department departmentData = departmentRepository.save(department);
 			return new ResponseEntity<>(departmentData, HttpStatus.CREATED);
 		} catch (Exception e) {

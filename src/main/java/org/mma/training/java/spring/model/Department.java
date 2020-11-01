@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -27,6 +29,8 @@ public class Department {
 	private Long id;
 	
 	@Column(name = "DEPARTMENT_NAME")
+	@NotBlank
+	@Size(min = 3, max = 10)
 	private String name;
 	
 	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
