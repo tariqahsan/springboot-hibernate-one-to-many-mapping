@@ -1,0 +1,17 @@
+{
+    "name": "Engineering",
+    "employees":[
+        {"firstName": "Tariq",
+         "middleName": "",
+         "lastName": "Ahsan",
+         "managerName": "Mohammad Ali",
+         "salary": 78000.00
+        },
+        {"firstName": "Tausif",
+         "middleName": "R",
+         "lastName": "Ahsan",
+         "managerName": "Mohammad Ali",
+         "salary": 133000.00
+        }
+    ]
+}
