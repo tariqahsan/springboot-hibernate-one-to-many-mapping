@@ -30,7 +30,7 @@ public class Department {
 	
 	@Column(name = "DEPARTMENT_NAME")
 	@NotBlank
-	@Size(min = 3, max = 10)
+	@Size(min = 5, max = 20)
 	private String name;
 	
 	@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -74,6 +74,11 @@ public class Department {
 
 	public void setEmployees(List<Employee> employees) {
 		this.employees = employees;
+	}
+
+	@Override
+	public String toString() {
+		return "Department [id=" + id + ", name=" + name + ", employees=" + employees + "]";
 	}
 	
 }

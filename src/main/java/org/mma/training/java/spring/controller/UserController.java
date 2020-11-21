@@ -56,7 +56,7 @@ public class UserController {
 		}
 	}
     
-    @PostMapping(value = "/add")
+    @PostMapping(value = "/user/add")
 	public ResponseEntity<User> postUser(@RequestBody User user) {
     	
 		try {
@@ -67,7 +67,7 @@ public class UserController {
 		}
 	}
     
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/user/delete/{id}")
 	public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") long id) {
     	System.out.println("Deleting id -> " + id);
 		try {
@@ -78,7 +78,7 @@ public class UserController {
 		}
 	}
     
-    @DeleteMapping("/delete-all")
+    @DeleteMapping("/user/delete-all")
 	public ResponseEntity<HttpStatus> deleteAllUsers() {
     	System.out.println("Deleting all users");
 		try {
@@ -91,11 +91,15 @@ public class UserController {
     
     // Updates article
 //  	@PutMapping(value= "/update", produces= { MediaType.APPLICATION_XML_VALUE })
-    @PutMapping(value= "/update")
+    @PutMapping(value= "/user/update")
   	public ResponseEntity<User> updateUser(@RequestBody User user) {
   		System.out.println("User FirstName : " + user.getFirstName());
+  		System.out.println("user.getUserId() : " + user.getUserId());
   		User userObj = new User();
-  		BeanUtils.copyProperties(user, userObj);		
+  		BeanUtils.copyProperties(user, userObj);
+  		//userObj.setUserId(1L);
+//  		System.out.println("userObj.getUserId() : " + userObj.getUserId());
+//  		System.out.println("userObj.getAddress().getZip4() : " + userObj.getAddress().getZip4());
   		userService.updateUser(userObj);
   		
   		User ob = new User();
@@ -114,18 +118,30 @@ public class UserController {
 //  		BeanUtils.copyProperties(article, ob);
 //  		return new ResponseEntity<ArticleInfo>(ob, HttpStatus.OK);
 //  	}
-    @PutMapping("/users/{id}")
+    @PutMapping("/user/update/{id}")
     public ResponseEntity<User> updateUser(@PathVariable(value = "id") Long userId, @RequestBody User userDetails) {
     	Optional<User> user = userRepository.findById(userId);
     	System.out.println(user.get().getFirstName());
+    	System.out.println(user.get().getUserId());
 //      @Valid @RequestBody User employeeDetails) throws ResourceNotFoundException {
     	//User user = userRepository.findById(userId)
 //     .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + userId));
- 		User userObj = new User();
- 		
-  		BeanUtils.copyProperties(user, userObj);
-  		System.out.println(userObj.getAddress().getZip4());
-     final User updatedUser = userRepository.save(userObj);
+ 		//User userObj = new User();
+    	userDetails.setUserId(user.get().getUserId());
+//  		BeanUtils.copyProperties(user, userObj);
+    	BeanUtils.copyProperties(user.get(), userDetails);
+    	
+//  		System.out.println(userObj.getAddress().getZip4());
+    	System.out.println("user.get().getUserId() --> " + user.get().getUserId());
+    	System.out.println("userDetails.getUserId() --> " + userDetails.getUserId());
+    	System.out.println("userDetails.getAddress().getZip4() --> " + userDetails.getAddress().getZip4());
+    	System.out.println("userDetails.getFirstName() --> " + userDetails.getFirstName());
+    	System.out.println("userDetails.getAddress().getCity() --> " + userDetails.getAddress().getCity());
+//     final User updatedUser = userRepository.save(userObj);
+    	// Set ID 
+    	userDetails.setUserId(user.get().getUserId());
+    	System.out.println("userDetails.getUserId() --> " + userDetails.getUserId());
+    	final User updatedUser = userRepository.save(userDetails);
      return ResponseEntity.ok(updatedUser);
     }
 

@@ -10,6 +10,7 @@ import javax.validation.Valid;
 
 import org.mma.training.java.spring.exception.ResourceNotFoundException;
 import org.mma.training.java.spring.model.Department;
+import org.mma.training.java.spring.model.Employee;
 import org.mma.training.java.spring.repository.DepartmentRepository;
 import org.mma.training.java.spring.service.DepartmentService;
 import org.mma.training.java.spring.util.ErrorMessage;
@@ -59,7 +60,6 @@ public class DepartmentController {
 	@GetMapping("/departments/{id}")
 	public ResponseEntity<Department> getDepartmentsById(@PathVariable("id") long id) {
 		Optional<Department> departmentsData = departmentRepository.findById(id);
-		System.out.println("departmentsData : " + departmentsData.get().getName());
 		if (departmentsData.isPresent()) {
 			return new ResponseEntity<>(departmentsData.get(), HttpStatus.OK);
 		} else {
@@ -120,68 +120,45 @@ public class DepartmentController {
 		}
 	}
 
-	// Updates article
-	//  	@PutMapping(value= "/update", produces= { MediaType.APPLICATION_XML_VALUE })
-	@PutMapping(value= "/department/update/id/{id}")
-	public ResponseEntity<Department> updateDepartmentById(@PathVariable(value = "id") Long id, @RequestBody Department departmentData) throws ResourceNotFoundException, IllegalAccessException, InvocationTargetException {
-		System.out.println("departmentData.getName() -> " + departmentData.getName());
-		Optional<Department> departmentObj = departmentRepository.findById(id);
-		System.out.println("departmentObj.get() -> " + departmentObj.get().getId() + " " + departmentObj.get().getName());
-		Department department = departmentObj.orElseThrow(() -> new ResourceNotFoundException("ID not found for this Research Project :: " + id));
-		System.out.println("1 department.getName() -> " + department.getName());
-//		BeanUtils.copyProperties(department, departmentData);
-		BeanUtils.copyProperties(departmentData, department);
-		System.out.println("2 department.getName() -> " + department.getName());
-		System.out.println("2 departmentData.getName() -> " + departmentData.getName());
-		departmentRepository.save(department);
-
-		return new ResponseEntity<>(null, HttpStatus.OK);
-		//  		Department departmentObj = new Department();
-		//  		BeanUtils.copyProperties(department, departmentObj);		
-		//  		departmentService.updateDepartment(departmentObj);
-		//  		
-		//  		Department ob = new Department();
-		//  		BeanUtils.copyProperties(departmentObj, ob);
-		//  		return new ResponseEntity<Department>(ob, HttpStatus.OK);
-	}
-
-	//    @PutMapping("/department/update/id/{id}")
-	//    public ResponseEntity<Department> updateDepartment(@PathVariable(value = "id") Integer id,
-	//                                    @Valid @RequestBody DepartmentDto departmentDto) throws ResourceNotFoundException, IllegalAccessException, InvocationTargetException {
-	//                    Optional<Department> departmentData = departmentRepository.findById(id);
-	//                    Department department = departmentData.orElseThrow(() -> new ResourceNotFoundException("ID not found for this Research Project :: " + id));
-	//
-	//                    BeanUtils.copyProperties(department, departmentDto);
-	//
-	//                    departmentRepository.save(department);
-	//
-	//                    return new ResponseEntity<>(null, HttpStatus.OK);
-	//    }
-
-	//Updates article
-	//  	@PutMapping(value= "article", produces= { MediaType.APPLICATION_XML_VALUE })
-	//  	public ResponseEntity<ArticleInfo> updateArticle(@RequestBody ArticleInfo articleInfo) {
-	//  		Article article = new Article();
-	//  		BeanUtils.copyProperties(articleInfo, article);		
-	//  		articleService.updateArticle(article);
-	//  		
-	//  		ArticleInfo ob = new ArticleInfo();
-	//  		BeanUtils.copyProperties(article, ob);
-	//  		return new ResponseEntity<ArticleInfo>(ob, HttpStatus.OK);
-	//  	}
-	@PutMapping("/departments/{id}")
-	public ResponseEntity<Department> updateDepartment(@PathVariable(value = "id") Long departmentId, @RequestBody Department departmentDetails) {
+	@PutMapping("/department/update/{id}")
+	public ResponseEntity<Department> updateDepartment(@PathVariable(value = "id") Long departmentId, @RequestBody Department departmentObj) {
 		Optional<Department> department = departmentRepository.findById(departmentId);
 		System.out.println(department.get().getName());
 		//      @Valid @RequestBody Department employeeDetails) throws ResourceNotFoundException {
 		//Department department = departmentRepository.findById(departmentId)
 		//     .orElseThrow(() -> new ResourceNotFoundException("Department not found for this id :: " + departmentId));
+		//Department departmentObj = new Department();
+		//System.out.println(department.get());
+		BeanUtils.copyProperties(department.get(), departmentObj);
+		for (Employee e : departmentObj.getEmployees()) {
+			System.out.println(e.getId() + " " + e.getFirstName() + " " + e.getManagerName());
+		}
+		final Department updatedDepartment = departmentRepository.save(departmentObj);
+		return ResponseEntity.ok(updatedDepartment);
+		//return ResponseEntity.ok(departmentDetails);
+	}
+	
+	@PutMapping("/department/update")
+	public ResponseEntity<Department> updateDepartmentEmployee(@RequestBody Department departmentDetails) {
+		
+		// @Valid @RequestBody Department employeeDetails) throws ResourceNotFoundException {
+		// Department department = departmentRepository.findById(departmentId)
+		// .orElseThrow(() -> new ResourceNotFoundException("Department not found for this id :: " + departmentId));
+		
+		// Create a Department object
 		Department departmentObj = new Department();
 
-		BeanUtils.copyProperties(department, departmentObj);
-		//System.out.println(departmentObj.getEmployees().);
+		BeanUtils.copyProperties(departmentDetails, departmentObj);
+		System.out.println(departmentObj.getId());
+		Optional<Department> department = departmentRepository.findById(departmentObj.getId());
+		System.out.println(department.get().getId());
+		BeanUtils.copyProperties(departmentDetails, department);
+		for(Employee e : department.get().getEmployees()) {
+			System.out.println(e.getManagerName());
+		}
 		final Department updatedDepartment = departmentRepository.save(departmentObj);
 		return ResponseEntity.ok(updatedDepartment);
 	}
+	
 
 }

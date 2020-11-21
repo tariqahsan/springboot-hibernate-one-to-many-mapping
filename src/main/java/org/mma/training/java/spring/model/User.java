@@ -118,6 +118,17 @@ public class User {
 		return address;
 	}
 
+//	public void setAddress(Address address) {
+//		if(address == null) {
+//			if(this.address != null) {
+//				this.address.setUser(null);
+//			}
+//		} else {
+//			this.address.setUser(this);
+//		}
+//		this.address = address;
+//	}
+	
 	public void setAddress(Address address) {
 		this.address = address;
 	}
