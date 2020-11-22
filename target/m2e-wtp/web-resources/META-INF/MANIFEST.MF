@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
-Implementation-Title: SpringBootRESTApiH2
+Implementation-Title: springboot-hibernate-onetomany-mapping
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: Tariq Ahsan
-Implementation-Vendor-Id: org.tahsan
+Implementation-Vendor-Id: org.mma
 Build-Jdk: 1.8.0_221
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
- ot-starter-parent/springbootrestapi
+ ot-starter-parent/springboot-hibernate-onetomany-mapping
 Created-By: Maven Integration for Eclipse
 
