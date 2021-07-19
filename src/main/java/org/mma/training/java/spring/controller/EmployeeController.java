@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:3737")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class EmployeeController {
 	
 	@Autowired
@@ -58,7 +61,7 @@ public class EmployeeController {
     
     @PostMapping(value = "/employee/add")
 	public ResponseEntity<Employee> postEmployee(@RequestBody Employee employee) {
-    	
+    	System.out.println(employee.getFullName());
 		try {
 			Employee employeeData = employeeRepository.save(employee);
 			return new ResponseEntity<>(employeeData, HttpStatus.CREATED);
@@ -93,7 +96,7 @@ public class EmployeeController {
     // @PutMapping(value= "/update", produces= { MediaType.APPLICATION_XML_VALUE })
     @PutMapping(value= "/employee/update")
   	public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee) {
-  		System.out.println("Employee FirstName : " + employee.getFirstName());
+  		System.out.println("Employee FullName : " + employee.getFullName());
   		System.out.println("employee.getId() : " + employee.getId());
   		Employee emp = employeeRepository.getOne(employee.getId());
   		System.out.println("emp.getDepartment().getId(): " + emp.getDepartment().getId());
@@ -112,7 +115,7 @@ public class EmployeeController {
     @PutMapping("/employee/update/{id}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable(value = "id") Long employeeId, @RequestBody Employee employeeDetails) {
     	Optional<Employee> employee = employeeRepository.findById(employeeId);
-    	System.out.println(employee.get().getFirstName());
+    	System.out.println(employee.get().getFullName());
     	System.out.println(employee.get().getId());
 //      @Valid @RequestBody Employee employeeDetails) throws ResourceNotFoundException {
     	//Employee employee = employeeRepository.findById(employeeId)
@@ -125,7 +128,7 @@ public class EmployeeController {
     	System.out.println("employee.get().getId() --> " + employee.get().getId());
     	System.out.println("employeeDetails.getId() --> " + employeeDetails.getId());
     	
-    	System.out.println("employeeDetails.getFirstName() --> " + employeeDetails.getFirstName());
+    	System.out.println("employeeDetails.getFullName() --> " + employeeDetails.getFullName());
     	
     	// Set ID 
     	employeeDetails.setId(employee.get().getId());

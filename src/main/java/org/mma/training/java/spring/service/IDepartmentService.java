@@ -6,8 +6,8 @@ import org.mma.training.java.spring.model.Department;
 
 public interface IDepartmentService {
      List<Department> getAllDepartments();
-     Department getDepartmentById(long departmentId);
+     Department getDepartmentById(Long departmentId);
      boolean addDepartment(Department department);
      void updateDepartment(Department department);
-     void deleteDepartment(int departmentId);
+     void deleteDepartment(Long departmentId);
 }

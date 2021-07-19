@@ -21,8 +21,8 @@ import org.hibernate.annotations.GenericGenerator;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "EMPLOYEE")
-public class Employee {
+@Table(name = "EMP")
+public class Emp {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
@@ -30,9 +30,15 @@ public class Employee {
 	@Column(name = "EMPLOYEE_ID", updatable = false, nullable = false)
 	private Long id;
 
-	@Column(name = "FULL_NAME")
-	@Size(min = 3, max = 25)
-	private String fullName;
+	@Column(name = "FIRST_NAME")
+	@Size(min = 3, max = 13)
+	private String firstName;
+
+	@Column(name = "MIDDLE_NAME")
+	private String middleName;
+
+	@Column(name = "LAST_NAME")
+	private String lastName;
 	
 	@Column(name = "EMAIL")
 	private String email;
@@ -52,23 +58,27 @@ public class Employee {
 	@JsonBackReference
 	private Department department;
 
-	public Employee() {}
+	public Emp() {}
 
-	public Employee(Long id, @Size(min = 3, max = 25) String fullName,
+	public Emp(Long id, @Size(min = 3, max = 13) String firstName, String middleName, String lastName,
 			String email, String managerName, BigDecimal salary, Department department) {
 		super();
 		this.id = id;
-		this.fullName = fullName;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
 		this.email = email;
 		this.managerName = managerName;
 		this.salary = salary;
 		this.department = department;
 	}
 	
-	public Employee(@Size(min = 3, max = 25) String fullName,String email,
+	public Emp(@Size(min = 3, max = 13) String firstName, String middleName, String lastName, String email,
 			String managerName, BigDecimal salary, Department department) {
 		super();
-		this.fullName = fullName;
+		this.firstName = firstName;
+		this.middleName = middleName;
+		this.lastName = lastName;
 		this.email = email;
 		this.managerName = managerName;
 		this.salary = salary;
@@ -83,12 +93,28 @@ public class Employee {
 		this.id = id;
 	}
 
-	public String getFullName() {
-		return fullName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFirstName(String fullName) {
-		this.fullName = fullName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 	
 	public String getEmail() {
@@ -125,8 +151,8 @@ public class Employee {
 
 	@Override
 	public String toString() {
-		return "Employee [id=" + id + ", fullName=" + fullName +  
-				 ", managerName=" + managerName + ", salary=" + salary + ", department=" + department + "]";
+		return "Employee [id=" + id + ", firstName=" + firstName + ", middleName=" + middleName + ", lastName="
+				+ lastName + ", managerName=" + managerName + ", salary=" + salary + ", department=" + department + "]";
 	}
 
 }

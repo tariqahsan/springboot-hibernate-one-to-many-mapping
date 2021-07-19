@@ -12,7 +12,7 @@ public class DepartmentService implements IDepartmentService {
 	@Autowired
 	private DepartmentRepository departmentRepository;
 	@Override
-	public Department getDepartmentById(long departmentId) {
+	public Department getDepartmentById(Long departmentId) {
 		Department obj = departmentRepository.findById(departmentId).get();
 		return obj;
 	}	
@@ -40,7 +40,7 @@ public class DepartmentService implements IDepartmentService {
 		departmentRepository.save(department);
 	}
 	@Override
-	public void deleteDepartment(int departmentId) {
+	public void deleteDepartment(Long departmentId) {
 		departmentRepository.delete(getDepartmentById(departmentId));
 	}
 }

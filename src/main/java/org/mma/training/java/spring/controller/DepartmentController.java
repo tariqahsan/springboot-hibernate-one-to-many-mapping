@@ -21,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,8 +31,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "http://localhost:3737")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/v1")
 public class DepartmentController {
 
 	@Autowired
@@ -58,8 +61,9 @@ public class DepartmentController {
 	}
 
 	@GetMapping("/departments/{id}")
-	public ResponseEntity<Department> getDepartmentsById(@PathVariable("id") long id) {
+	public ResponseEntity<Department> getDepartmentsById(@PathVariable("id") Long id) {
 		Optional<Department> departmentsData = departmentRepository.findById(id);
+
 		if (departmentsData.isPresent()) {
 			return new ResponseEntity<>(departmentsData.get(), HttpStatus.OK);
 		} else {
@@ -99,7 +103,7 @@ public class DepartmentController {
 	}
 
 	@DeleteMapping("/department/delete/{id}")
-	public ResponseEntity<HttpStatus> deleteDepartment(@PathVariable("id") long id) {
+	public ResponseEntity<HttpStatus> deleteDepartment(@PathVariable("id") Long id) {
 		System.out.println("Deleting id -> " + id);
 		try {
 			departmentRepository.deleteById(id);
@@ -131,7 +135,7 @@ public class DepartmentController {
 		//System.out.println(department.get());
 		BeanUtils.copyProperties(department.get(), departmentObj);
 		for (Employee e : departmentObj.getEmployees()) {
-			System.out.println(e.getId() + " " + e.getFirstName() + " " + e.getManagerName());
+			System.out.println(e.getId() + " " + e.getFullName() + " " + e.getManagerName());
 		}
 		final Department updatedDepartment = departmentRepository.save(departmentObj);
 		return ResponseEntity.ok(updatedDepartment);
