@@ -2,6 +2,7 @@ package org.mma.training.java.spring.model;
 
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 //import java.io.Serializable;
 import java.util.Date;
 
@@ -17,6 +18,7 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -75,7 +77,9 @@ public class PinRequest implements Serializable {
 	private PointOfContact poc;
 		
 	@Column( name = "CREATE_DT")
-	private Date createDate;
+	@CreationTimestamp
+	private LocalDateTime createDateTime;
+	//private Date createDate;
 	
 	@Column( name = "RESPONSE_IND")
 	private String responseInd;
@@ -131,13 +135,13 @@ public class PinRequest implements Serializable {
 		this.poc = poc;
 	}
 	
-	public Date getCreateDate() {
-		return createDate;
-	}
-	
-	public void setCreateDate( Date createDate ) {
-		this.createDate = createDate;
-	}
+//	public Date getCreateDate() {
+//		return createDate;
+//	}
+//	
+//	public void setCreateDate( Date createDate ) {
+//		this.createDate = createDate;
+//	}
 	
 	public String getResponseInd() {
 		return responseInd;
@@ -147,14 +151,30 @@ public class PinRequest implements Serializable {
 		this.responseInd = responseInd;
 	}
 	
+//	@Override
+//	public String toString() {
+//		return "PinRequest [createDate=" + createDate + ", divisionCageCode=" + divisionCageCode + ", divisionName=" + divisionName + ", id=" + id + ", parentCageCode=" + parentCageCode + ", parentOrgName=" + parentOrgName + ", poc=" + poc + ", responseInd=" + responseInd + "]";
+//	}
+	
 	@Override
 	public String toString() {
-		return "PinRequest [createDate=" + createDate + ", divisionCageCode=" + divisionCageCode + ", divisionName=" + divisionName + ", id=" + id + ", parentCageCode=" + parentCageCode + ", parentOrgName=" + parentOrgName + ", poc=" + poc + ", responseInd=" + responseInd + "]";
+		return "PinRequest [id=" + id + ", parentOrgName=" + parentOrgName + ", parentCageCode=" + parentCageCode
+				+ ", divisionName=" + divisionName + ", divisionCageCode=" + divisionCageCode + ", poc=" + poc
+				+ ", createDateTime=" + createDateTime + ", responseInd=" + responseInd + ", replacement=" + replacement
+				+ "]";
 	}
 
 	public String getReplacement()
 	{
 		return replacement;
+	}
+
+	public LocalDateTime getCreateDateTime() {
+		return createDateTime;
+	}
+
+	public void setCreateDateTime(LocalDateTime createDateTime) {
+		this.createDateTime = createDateTime;
 	}
 
 	public void setReplacement( String replacement )
